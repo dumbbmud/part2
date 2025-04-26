@@ -4,7 +4,7 @@ import Total from "./Total"
 const Course = ({course}) => {
     return (
         <>
-            <h1>{course.name}</h1>
+            <h2>{course.name}</h2>
             
             {course.parts.map(x =>
                 <Note key={x.id} note={x} />
