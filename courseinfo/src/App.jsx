@@ -77,8 +77,16 @@ const App = () => {
     const personObject = {
       name: newName
     }
+    let present = false
+    persons.map((x) => {
+    if (x.name === newName){
+      alert(`${newName} is already added to the phonebook`)
+      present = true
+    }}
+    )
+    if (!present){
     setPersons(persons.concat(personObject))
-    setNewName('')
+    setNewName('')}
 
   }
 
