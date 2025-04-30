@@ -62,6 +62,38 @@ const PhonebookDisplay = ({persons}) =>{
 
 const DisplaySearch = ({x}) => <div>{x.name}</div>
 
+const Filter = ({handleSearch, search, searchResult}) => {
+  return(
+  <>
+  <div>filter shown with: <input onChange={handleSearch} value={search}/></div>    
+  <br/>
+  {search.length > 0 ? searchResult.map(x => <strong><DisplaySearch key={x.id} x={x}/></strong>) : null}
+  <br/>
+  </>
+  )
+}
+
+const PersonForm = ({addPerson, handleNewName, newName, handleNewNumber, newNumber}) => {
+  return(
+  <form onSubmit={addPerson}>
+    <div>name: <input onChange={handleNewName} value={newName}/></div>
+    <br/>
+    <div>number: <input onChange={handleNewNumber} value={newNumber}/></div>
+    <br/>
+    <div>
+    <button type="submit">add</button>
+    </div>
+  </form>
+  )
+}
+
+const Persons = ({persons}) => {
+  return(
+  persons.map(x => 
+    <PhonebookDisplay key={x.id} persons={x} />
+  )
+  )
+}
 
 
 const App = () => {
@@ -125,25 +157,33 @@ const App = () => {
   console.log("search here", searchResult)
 
   return (
+    // <div>
+    //   <h3>Phonebook</h3>
+    //   <div>filter shown with: <input onChange={handleSearch} value={search}/></div>    
+    //   <br/>
+    //   {search.length > 0 ? searchResult.map(x => <strong><DisplaySearch key={x.id} x={x}/></strong>) : null}
+    //   <br/>
+    //   <form onSubmit={addPerson}>
+    //       <div>name: <input onChange={handleNewName} value={newName}/></div>
+    //       <br/>
+    //       <div>number: <input onChange={handleNewNumber} value={newNumber}/></div>
+    //       <br/>
+    //     <div>
+    //       <button type="submit">add</button>
+    //     </div>
+    //   </form>
+    //   <h3>Numbers</h3>
+    //   {persons.map(x => 
+    //     <PhonebookDisplay key={x.id} persons={x} />
+    //   )}
+    // </div>
     <div>
       <h2>Phonebook</h2>
-      <div>filter shown with: <input onChange={handleSearch} value={search}/></div>    
-      <br/>
-      {search.length > 0 ? searchResult.map(x => <strong><DisplaySearch key={x.id} x={x}/></strong>) : null}
-      <br/>
-      <form onSubmit={addPerson}>
-          <div>name: <input onChange={handleNewName} value={newName}/></div>
-          <br/>
-          <div>number: <input onChange={handleNewNumber} value={newNumber}/></div>
-          <br/>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {persons.map(x => 
-        <PhonebookDisplay key={x.id} persons={x} />
-      )}
+      <Filter handleSearch={handleSearch} search={search} searchResult={searchResult}/>
+      <h3>Add a new contact</h3>
+      <PersonForm addPerson={addPerson} handleNewName={handleNewName} newName={newName} handleNewNumber={handleNewNumber} newNumber={newNumber}/>
+      <h3>Numbers</h3>
+      <Persons persons={persons}/>
     </div>
   )
 }
