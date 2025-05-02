@@ -1,6 +1,12 @@
-const Note = ({note}) =>{
+const Note = ({note, toggleImp}) =>{
+  
+  const label = note.important ? "make not important" : "make important"
+
     return (
-      <p>{note.name} {note.exercises}</p>
+      <li>
+      {note.content + "  "}
+      <button onClick={toggleImp}>{label}</button>
+      </li>
     )
   }
 
