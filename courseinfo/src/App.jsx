@@ -2,9 +2,12 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import contactServices from './services/contacts'
 
-const PhonebookDisplay = ({persons}) =>{
+const PhonebookDisplay = ({persons, remove}) =>{
   return (
-    <p>{persons.name} {persons.number} </p>
+    <p>
+      {persons.name} {persons.number} 
+      <button onClick={() => remove(persons.id)}>delete</button>
+    </p>
     
   )
 }
@@ -36,13 +39,18 @@ const PersonForm = ({addPerson, handleNewName, newName, handleNewNumber, newNumb
   )
 }
 
-const Persons = ({persons}) => {
+const Persons = ({persons, remove}) => {
   return(
   persons.map(x => 
-    <PhonebookDisplay key={x.id} persons={x} />
+    <PhonebookDisplay key={x.id} persons={x} remove={remove} />
   )
   )
 }
+
+
+// const remove = (id) =>{
+// contactServices.remove(id)
+// }
 
 
 const App = () => {
@@ -93,6 +101,13 @@ const App = () => {
 
   }
 
+  const remove = (id) =>{
+    contactServices.remove(id)
+    .then(returnedContacts =>
+      setPersons(returnedContacts)
+    )
+  }
+
   const handleSearch = (event) => {
     setSearch(event.target.value.toLowerCase())  
   } 
@@ -100,6 +115,7 @@ const App = () => {
   const searchResult = persons.filter((x) =>
     x.name.toLowerCase().includes(search)
   )
+
 
 
   console.log("search here", searchResult)
@@ -111,7 +127,7 @@ const App = () => {
       <h3>Add a new contact</h3>
       <PersonForm addPerson={addPerson} handleNewName={handleNewName} newName={newName} handleNewNumber={handleNewNumber} newNumber={newNumber}/>
       <h3>Numbers</h3>
-      <Persons persons={persons}/>
+      <Persons persons={persons} remove={remove}/>
     </div>
   )
 }
