@@ -85,8 +85,17 @@ const App = () => {
     let present = false
     persons.map((x) => {
     if (x.name === newName){
-      alert(`${newName} is already added to the phonebook`)
+      // go to the id and change it to the new person object
       present = true
+      const confirmReplace = window.confirm(`${newName} is already added to the phonebook. Do you want to replace it with this new number?`)
+      
+      if (confirmReplace){
+      contactServices
+      .replace(x.id, personObject)
+      .then(returnData => setPersons(returnData) )
+      }
+
+      // alert(`${newName} is already added to the phonebook`)
     }}
     )
     if (!present){
