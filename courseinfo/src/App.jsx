@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import AddNotification from './components/AddNotification'
 import contactServices from './services/contacts'
+import ErrorNotification from './components/ErrorNotification'
 
 const PhonebookDisplay = ({persons, remove}) =>{
   return (
@@ -48,16 +50,14 @@ const Persons = ({persons, remove}) => {
 }
 
 
-// const remove = (id) =>{
-// contactServices.remove(id)
-// }
-
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [addMessage, setAddMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(()=>{
     contactServices
@@ -92,10 +92,12 @@ const App = () => {
       if (confirmReplace){
       contactServices
       .replace(x.id, personObject)
-      .then(returnData => setPersons(returnData) )
+      .then(returnData => {setPersons(returnData)
+      setAddMessage(`${personObject.name}'s number has been updated`)
+      setTimeout(() => setAddMessage(null), 3000)})
+      .catch(error => setErrorMessage(`The contact ${personObject.name} is no longer in the contacts`))
       }
 
-      // alert(`${newName} is already added to the phonebook`)
     }}
     )
     if (!present){
@@ -104,11 +106,14 @@ const App = () => {
         .then(returnedContacts =>
           setPersons(persons.concat(returnedContacts))
         )
-    }
+        setAddMessage(`${personObject.name} has been added`)
+        setTimeout(() => setAddMessage(null), 3000)
+      }   
     setNewName('')
     setNewNumber('')
 
   }
+
 
   const remove = (id) =>{
     contactServices.remove(id)
@@ -134,6 +139,8 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter handleSearch={handleSearch} search={search} searchResult={searchResult}/>
       <h3>Add a new contact</h3>
+      <AddNotification addMessage={addMessage}/>
+      <ErrorNotification errorMessage={errorMessage}/>
       <PersonForm addPerson={addPerson} handleNewName={handleNewName} newName={newName} handleNewNumber={handleNewNumber} newNumber={newNumber}/>
       <h3>Numbers</h3>
       <Persons persons={persons} remove={remove}/>
