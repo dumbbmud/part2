@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import AddNotification from './components/AddNotification'
 import contactServices from './services/contacts'
